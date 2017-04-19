@@ -88,12 +88,15 @@ public class ConcurrentOWLOntologyImpl implements OWLMutableOntology,HasTrimToSi
 
     @Override
     public boolean equals(Object obj) {
+    	return delegate.equals(obj);
+    	/**
         readLock.lock();
         try {
             return delegate.equals(obj);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
