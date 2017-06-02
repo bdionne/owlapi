@@ -16,11 +16,7 @@ import static org.semanticweb.owlapi.model.parameters.Imports.INCLUDED;
 import static org.semanticweb.owlapi.util.CollectionFactory.*;
 import static org.semanticweb.owlapi.util.OWLAPIPreconditions.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -1013,7 +1009,10 @@ public class OWLOntologyManagerImpl implements OWLOntologyManager, OWLOntologyFa
 
     @Override
     public OWLOntology loadOntologyFromOntologyDocument(File file) throws OWLOntologyCreationException {
-        return loadOntologyFromOntologyDocument(new FileDocumentSource(file));
+    	if (!file.exists()) {
+    		throw new RuntimeException(new FileNotFoundException(file.toString()));
+			}
+			return loadOntologyFromOntologyDocument(new FileDocumentSource(file));
     }
 
     @Override
