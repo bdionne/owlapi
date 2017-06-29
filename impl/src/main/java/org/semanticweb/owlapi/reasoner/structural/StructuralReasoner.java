@@ -224,6 +224,21 @@ public class StructuralReasoner extends OWLReasonerBase {
         return ns;
     }
 
+    @Nonnull
+    @Override
+    public Map<OWLClass, NodeSet<OWLClass>> getAllSuperClasses(boolean direct) {
+        Map<OWLClass, NodeSet<OWLClass>> results = new HashMap<>();
+        ensurePrepared();
+        for (OWLClass ce : classHierarchyInfo.getEntities(getRootOntology())) {
+            if (!ce.isAnonymous()) {
+                OWLClassNodeSet ns = new OWLClassNodeSet();
+                ensurePrepared();
+                results.put(ce, classHierarchyInfo.getNodeHierarchyParents(ce.asOWLClass(), direct, ns));
+            }
+        }
+        return results;
+    }
+
     @Override
     public Node<OWLClass> getEquivalentClasses(@Nonnull OWLClassExpression ce) {
         ensurePrepared();

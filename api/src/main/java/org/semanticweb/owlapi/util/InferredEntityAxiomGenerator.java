@@ -14,14 +14,18 @@ package org.semanticweb.owlapi.util;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.reasoner.NodeSet;
 
 /**
  * Generates axioms which relate to inferred information for a specific entity.
@@ -38,21 +42,26 @@ public abstract class InferredEntityAxiomGenerator<E extends OWLEntity, A extend
         implements InferredAxiomGenerator<A> {
 
     @Override
-    public Set<A> createAxioms(@Nonnull OWLDataFactory df,
-            @Nonnull OWLReasoner reasoner) {
-        Set<E> processedEntities = new HashSet<>();
-        Set<A> result = new HashSet<>();
+    public Set<A> createAxioms(@Nonnull OWLDataFactory df, @Nonnull OWLReasoner reasoner) {
+        Set<OWLSubClassOfAxiom> result = new HashSet<>();
         for (OWLOntology ont : reasoner.getRootOntology().getImportsClosure()) {
             assert ont != null;
-            for (E entity : getEntities(ont)) {
-                assert entity != null;
-                if (!processedEntities.contains(entity)) {
-                    processedEntities.add(entity);
-                    addAxioms(entity, reasoner, df, result);
+
+            Map<OWLClass, NodeSet<OWLClass>> results = reasoner.getAllSuperClasses(true);
+            for (Map.Entry<OWLClass, NodeSet<OWLClass>> entry : results.entrySet()) {
+                OWLClass entity = entry.getKey();
+
+                if (reasoner.isSatisfiable(entity)) {
+                    for (OWLClass sup : entry.getValue().getFlattened()) {
+                        assert sup != null;
+                        result.add(df.getOWLSubClassOfAxiom(entity, sup));
+                    }
+                } else {
+                    result.add(df.getOWLSubClassOfAxiom(entity, df.getOWLNothing()));
                 }
             }
         }
-        return result;
+        return (Set<A>) result; // FIXME: get rid of this cast
     }
 
     /**

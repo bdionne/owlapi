@@ -14,6 +14,7 @@ package org.semanticweb.owlapi.reasoner;
 
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -641,6 +642,9 @@ public interface OWLReasoner {
     @Nonnull
     NodeSet<OWLClass> getSuperClasses(@Nonnull OWLClassExpression ce,
             boolean direct);
+
+    @Nonnull
+    Map<OWLClass, NodeSet<OWLClass>> getAllSuperClasses(boolean direct);
 
     /**
      * Gets the set of named classes that are equivalent to the specified class
