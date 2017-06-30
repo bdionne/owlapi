@@ -14,21 +14,10 @@ package org.semanticweb.owlapi.reasoner;
 
 import java.util.List;
 import java.util.Set;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyChange;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.Version;
 
 /**
@@ -644,7 +633,7 @@ public interface OWLReasoner {
             boolean direct);
 
     @Nonnull
-    Map<OWLClass, NodeSet<OWLClass>> getAllSuperClasses(boolean direct);
+    Set<OWLSubClassOfAxiom> getAllInferredSuperClasses(boolean direct);
 
     /**
      * Gets the set of named classes that are equivalent to the specified class

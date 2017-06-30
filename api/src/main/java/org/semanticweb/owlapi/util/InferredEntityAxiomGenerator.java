@@ -47,19 +47,7 @@ public abstract class InferredEntityAxiomGenerator<E extends OWLEntity, A extend
         for (OWLOntology ont : reasoner.getRootOntology().getImportsClosure()) {
             assert ont != null;
 
-            Map<OWLClass, NodeSet<OWLClass>> results = reasoner.getAllSuperClasses(true);
-            for (Map.Entry<OWLClass, NodeSet<OWLClass>> entry : results.entrySet()) {
-                OWLClass entity = entry.getKey();
-
-                if (reasoner.isSatisfiable(entity)) {
-                    for (OWLClass sup : entry.getValue().getFlattened()) {
-                        assert sup != null;
-                        result.add(df.getOWLSubClassOfAxiom(entity, sup));
-                    }
-                } else {
-                    result.add(df.getOWLSubClassOfAxiom(entity, df.getOWLNothing()));
-                }
-            }
+            result = reasoner.getAllInferredSuperClasses(true);
         }
         return (Set<A>) result; // FIXME: get rid of this cast
     }

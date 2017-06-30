@@ -21,6 +21,7 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Sets;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.model.parameters.AxiomAnnotations;
 import org.semanticweb.owlapi.reasoner.*;
@@ -226,17 +227,27 @@ public class StructuralReasoner extends OWLReasonerBase {
 
     @Nonnull
     @Override
-    public Map<OWLClass, NodeSet<OWLClass>> getAllSuperClasses(boolean direct) {
-        Map<OWLClass, NodeSet<OWLClass>> results = new HashMap<>();
+    public Set<OWLSubClassOfAxiom> getAllInferredSuperClasses(boolean direct) {
+        Set<OWLSubClassOfAxiom> result = new HashSet<>();
+        final OWLDataFactory factory = getDataFactory();
         ensurePrepared();
-        for (OWLClass ce : classHierarchyInfo.getEntities(getRootOntology())) {
-            if (!ce.isAnonymous()) {
-                OWLClassNodeSet ns = new OWLClassNodeSet();
-                ensurePrepared();
-                results.put(ce, classHierarchyInfo.getNodeHierarchyParents(ce.asOWLClass(), direct, ns));
+        for (OWLClass entity : classHierarchyInfo.getEntities(getRootOntology())) {
+            if( !isSatisfiable( entity ) ) {
+                result.add( factory.getOWLSubClassOfAxiom( entity, factory.getOWLNothing() ) );
+                continue;
+            }
+            SupFindVisitor sfv = new SupFindVisitor( entity, getRootOntology() );
+            entity.accept( sfv );
+
+            Set<OWLClass> superClasses = getSuperClasses( entity, direct ).getFlattened();
+
+            Set<OWLClass> difference = Sets.difference( superClasses, sfv.sups );
+
+            for( OWLClass sup : difference ) {
+                result.add( factory.getOWLSubClassOfAxiom( entity, sup ) );
             }
         }
-        return results;
+        return result;
     }
 
     @Override
