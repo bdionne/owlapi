@@ -231,7 +231,7 @@ public class StructuralReasoner extends OWLReasonerBase {
         Set<OWLSubClassOfAxiom> result = new HashSet<>();
         final OWLDataFactory factory = getDataFactory();
         ensurePrepared();
-        for (OWLClass entity : classHierarchyInfo.getEntities(getRootOntology())) {
+        for( OWLClass entity : classHierarchyInfo.getEntities( getRootOntology() ) ) {
             if( !isSatisfiable( entity ) ) {
                 result.add( factory.getOWLSubClassOfAxiom( entity, factory.getOWLNothing() ) );
                 continue;

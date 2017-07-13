@@ -14,18 +14,15 @@ package org.semanticweb.owlapi.util;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
-import org.semanticweb.owlapi.reasoner.NodeSet;
 
 /**
  * Generates axioms which relate to inferred information for a specific entity.
@@ -47,7 +44,7 @@ public abstract class InferredEntityAxiomGenerator<E extends OWLEntity, A extend
         for (OWLOntology ont : reasoner.getRootOntology().getImportsClosure()) {
             assert ont != null;
 
-            result = reasoner.getAllInferredSuperClasses(true);
+            result.addAll(reasoner.getAllInferredSuperClasses(true));
         }
         return (Set<A>) result; // FIXME: get rid of this cast
     }
