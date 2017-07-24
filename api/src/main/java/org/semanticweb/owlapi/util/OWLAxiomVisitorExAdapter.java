@@ -13,6 +13,7 @@
 package org.semanticweb.owlapi.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationPropertyDomainAxiom;
@@ -72,7 +73,7 @@ public class OWLAxiomVisitorExAdapter<O> extends
      * @param object
      *        default return value
      */
-    public OWLAxiomVisitorExAdapter(@Nonnull O object) {
+    public OWLAxiomVisitorExAdapter(@Nullable O object) {
         super(object);
     }
 

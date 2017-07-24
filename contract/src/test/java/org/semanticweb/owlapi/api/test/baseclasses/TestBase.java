@@ -330,7 +330,7 @@ public abstract class TestBase {
         return false;
     }
 
-    @Nonnull private final String uriBase = "http://www.semanticweb.org/owlapi/test";
+    @Nonnull private static final String uriBase = "http://www.semanticweb.org/owlapi/test";
 
     @Nonnull
     public OWLOntology getOWLOntology(String name) {
@@ -358,7 +358,7 @@ public abstract class TestBase {
     }
 
     @Nonnull
-    public IRI iri(String name) {
+    public static IRI iri(String name) {
         return IRI(uriBase + '#' + name);
     }
 

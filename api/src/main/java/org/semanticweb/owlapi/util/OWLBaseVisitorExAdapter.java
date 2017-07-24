@@ -13,6 +13,7 @@
 package org.semanticweb.owlapi.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Provides a base for visitorEx adapters. The adapter can be set up to return a
@@ -62,7 +63,7 @@ public class OWLBaseVisitorExAdapter<O, I> {
      * @param defaultReturnValue
      *        default return value
      */
-    public OWLBaseVisitorExAdapter(@Nonnull O defaultReturnValue) {
+    public OWLBaseVisitorExAdapter(@Nullable O defaultReturnValue) {
         this.defaultReturnValue = defaultReturnValue;
     }
 }
