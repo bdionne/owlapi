@@ -44,7 +44,7 @@ public abstract class InferredEntityAxiomGenerator<E extends OWLEntity, A extend
         for (OWLOntology ont : reasoner.getRootOntology().getImportsClosure()) {
             assert ont != null;
 
-            result.addAll(reasoner.getAllInferredSuperClasses(true));
+            result.addAll(reasoner.getAllInferredSuperClasses());
         }
         return (Set<A>) result; // FIXME: get rid of this cast
     }

@@ -227,27 +227,10 @@ public class StructuralReasoner extends OWLReasonerBase {
 
     @Nonnull
     @Override
-    public Set<OWLSubClassOfAxiom> getAllInferredSuperClasses(boolean direct) {
-        Set<OWLSubClassOfAxiom> result = new HashSet<>();
-        final OWLDataFactory factory = getDataFactory();
+    public Set<OWLSubClassOfAxiom> getAllInferredSuperClasses() {
         ensurePrepared();
-        for( OWLClass entity : classHierarchyInfo.getEntities( getRootOntology() ) ) {
-            if( !isSatisfiable( entity ) ) {
-                result.add( factory.getOWLSubClassOfAxiom( entity, factory.getOWLNothing() ) );
-                continue;
-            }
-            SupFindVisitor sfv = new SupFindVisitor( entity, getRootOntology() );
-            entity.accept( sfv );
 
-            Set<OWLClass> superClasses = getSuperClasses( entity, direct ).getFlattened();
-
-            Set<OWLClass> difference = Sets.difference( superClasses, sfv.sups );
-
-            for( OWLClass sup : difference ) {
-                result.add( factory.getOWLSubClassOfAxiom( entity, sup ) );
-            }
-        }
-        return result;
+        return getInferredClasses( getOWLDataFactory(), classHierarchyInfo.getEntities( getRootOntology() ) );
     }
 
     @Override

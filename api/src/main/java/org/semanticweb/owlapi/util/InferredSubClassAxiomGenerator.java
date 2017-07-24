@@ -35,7 +35,7 @@ public class InferredSubClassAxiomGenerator<A extends OWLAxiom> implements Infer
         for (OWLOntology ont : reasoner.getRootOntology().getImportsClosure()) {
             assert ont != null;
 
-            result.addAll(reasoner.getAllInferredSuperClasses(true));
+            result.addAll(reasoner.getAllInferredSuperClasses());
         }
         return (Set<A>) result; // FIXME: get rid of this cast
     }
