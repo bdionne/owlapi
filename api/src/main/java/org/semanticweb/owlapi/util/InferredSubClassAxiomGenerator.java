@@ -12,14 +12,14 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package org.semanticweb.owlapi.util;
 
-import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
-
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 
@@ -28,26 +28,16 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
  *         Informatics Group
  * @since 2.1.0
  */
-public class InferredSubClassAxiomGenerator extends
-        InferredClassAxiomGenerator<OWLSubClassOfAxiom> {
-
+public class InferredSubClassAxiomGenerator<A extends OWLAxiom> implements InferredAxiomGenerator<A> {
     @Override
-    protected void addAxioms(OWLClass entity, @Nonnull OWLReasoner reasoner,
-            OWLDataFactory dataFactory, Set<OWLSubClassOfAxiom> result) {
-        checkNotNull(dataFactory, "dataFactory cannot be null");
-        checkNotNull(reasoner, "reasoner cannot be null");
-        checkNotNull(result, "result cannot be null");
-        checkNotNull(entity, "entity cannot be null");
-        if (reasoner.isSatisfiable(entity)) {
-            for (OWLClass sup : reasoner.getSuperClasses(entity, true)
-                    .getFlattened()) {
-                assert sup != null;
-                result.add(dataFactory.getOWLSubClassOfAxiom(entity, sup));
-            }
-        } else {
-            result.add(dataFactory.getOWLSubClassOfAxiom(entity,
-                    dataFactory.getOWLNothing()));
+    public Set<A> createAxioms(@Nonnull OWLDataFactory df, @Nonnull OWLReasoner reasoner) {
+        Set<OWLSubClassOfAxiom> result = new HashSet<>();
+        for (OWLOntology ont : reasoner.getRootOntology().getImportsClosure()) {
+            assert ont != null;
+
+            result.addAll(reasoner.getAllInferredSuperClasses());
         }
+        return (Set<A>) result; // FIXME: get rid of this cast
     }
 
     @Override

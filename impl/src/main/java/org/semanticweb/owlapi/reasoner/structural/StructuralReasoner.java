@@ -21,6 +21,7 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Sets;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.model.parameters.AxiomAnnotations;
 import org.semanticweb.owlapi.reasoner.*;
@@ -222,6 +223,14 @@ public class StructuralReasoner extends OWLReasonerBase {
             return classHierarchyInfo.getNodeHierarchyParents(ce.asOWLClass(), direct, ns);
         }
         return ns;
+    }
+
+    @Nonnull
+    @Override
+    public Set<OWLSubClassOfAxiom> getAllInferredSuperClasses() {
+        ensurePrepared();
+
+        return getInferredClasses( getOWLDataFactory(), classHierarchyInfo.getEntities( getRootOntology() ) );
     }
 
     @Override

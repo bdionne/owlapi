@@ -12,22 +12,15 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package org.semanticweb.owlapi.reasoner;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
-import org.semanticweb.owlapi.model.OWLLiteral;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyChange;
+import com.google.common.collect.Sets;
+import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.util.Version;
 
 /**
@@ -641,6 +634,9 @@ public interface OWLReasoner {
     @Nonnull
     NodeSet<OWLClass> getSuperClasses(@Nonnull OWLClassExpression ce,
             boolean direct);
+
+    @Nonnull
+    Set<OWLSubClassOfAxiom> getAllInferredSuperClasses();
 
     /**
      * Gets the set of named classes that are equivalent to the specified class
@@ -1506,6 +1502,32 @@ public interface OWLReasoner {
      */
     @Nonnull
     IndividualNodeSetPolicy getIndividualNodeSetPolicy();
+
+    @Nonnull
+    default Set<OWLSubClassOfAxiom> getInferredClasses(OWLDataFactory factory, Collection<OWLClass> allClasses)
+    {
+        Set<OWLSubClassOfAxiom> result = new HashSet<>();
+
+        OWLOntology rootOntology = this.getRootOntology();
+
+        for (OWLClass entity : allClasses) {
+            if (!this.isSatisfiable(entity)) {
+                result.add(factory.getOWLSubClassOfAxiom(entity, factory.getOWLNothing()));
+                continue;
+            }
+            SupFindVisitor sfv = new SupFindVisitor(entity, rootOntology);
+            entity.accept(sfv);
+
+            Set<OWLClass> superClasses = this.getSuperClasses(entity, true).getFlattened();
+
+            Set<OWLClass> difference = Sets.difference(superClasses, sfv.sups);
+
+            for (OWLClass sup : difference) {
+                result.add(factory.getOWLSubClassOfAxiom(entity, sup));
+            }
+        }
+        return result;
+    }
 
     /**
      * Disposes of this reasoner. This frees up any resources used by the

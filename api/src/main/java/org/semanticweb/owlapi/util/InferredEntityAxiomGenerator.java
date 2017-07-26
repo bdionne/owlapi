@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLEntity;
@@ -38,21 +39,14 @@ public abstract class InferredEntityAxiomGenerator<E extends OWLEntity, A extend
         implements InferredAxiomGenerator<A> {
 
     @Override
-    public Set<A> createAxioms(@Nonnull OWLDataFactory df,
-            @Nonnull OWLReasoner reasoner) {
-        Set<E> processedEntities = new HashSet<>();
-        Set<A> result = new HashSet<>();
+    public Set<A> createAxioms(@Nonnull OWLDataFactory df, @Nonnull OWLReasoner reasoner) {
+        Set<OWLSubClassOfAxiom> result = new HashSet<>();
         for (OWLOntology ont : reasoner.getRootOntology().getImportsClosure()) {
             assert ont != null;
-            for (E entity : getEntities(ont)) {
-                assert entity != null;
-                if (!processedEntities.contains(entity)) {
-                    processedEntities.add(entity);
-                    addAxioms(entity, reasoner, df, result);
-                }
-            }
+
+            result.addAll(reasoner.getAllInferredSuperClasses());
         }
-        return result;
+        return (Set<A>) result; // FIXME: get rid of this cast
     }
 
     /**
