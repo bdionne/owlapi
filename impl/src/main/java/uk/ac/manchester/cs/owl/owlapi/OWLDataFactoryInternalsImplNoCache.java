@@ -145,6 +145,9 @@ public class OWLDataFactoryInternalsImplNoCache implements OWLDataFactoryInterna
         @Nonnull OWLDatatype datatype) {
         OWLLiteral literal;
         if (datatype.isRDFPlainLiteral()) {
+        	literal = getBasicLiteral(lexicalValue, datatype);
+        	/** NOTE: temporarily disable this functionality because it doesn't take into
+        	 * account escaping for the "@" char, some modelers use it in preferred names
             int sep = lexicalValue.lastIndexOf('@');
             if (sep != -1) {
                 String lex = lexicalValue.substring(0, sep);
@@ -153,6 +156,7 @@ public class OWLDataFactoryInternalsImplNoCache implements OWLDataFactoryInterna
             } else {
                 literal = getBasicLiteral(lexicalValue, datatype);
             }
+            **/
         } else {
             // check the special cases
             try {
