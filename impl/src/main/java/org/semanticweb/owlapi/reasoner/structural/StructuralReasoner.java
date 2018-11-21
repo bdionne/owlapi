@@ -1340,4 +1340,10 @@ public class StructuralReasoner extends OWLReasonerBase {
             return properties;
         }
     }
+
+	@Override
+	public Set<OWLSubClassOfAxiom> getAllInferredSuperClasses() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

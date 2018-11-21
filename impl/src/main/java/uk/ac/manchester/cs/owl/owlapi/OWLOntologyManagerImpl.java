@@ -351,7 +351,8 @@ public class OWLOntologyManagerImpl
         }
     }
 
-    @Override
+    
+    /**
     public boolean contains(OWLOntologyID id) {
         if (id.isAnonymous()) {
             return false;
@@ -366,6 +367,25 @@ public class OWLOntologyManagerImpl
             readLock.unlock();
         }
     }
+    **/
+    @Override
+    public boolean contains(OWLOntologyID id) {
+        readLock.lock();
+        try {
+            if (ontologiesByID.containsKey(id)) {
+                return true;
+            }
+            for (OWLOntologyID nextOntologyID : ontologiesByID.keySet()) {
+                if (!id.isAnonymous() && id.getOntologyIRI().equals(nextOntologyID.getOntologyIRI())) {
+                    return true;
+                }
+            }
+            return false;
+        } finally {
+            readLock.unlock();
+        }
+    }
+
 
     @Override
     public boolean containsVersion(IRI iri) {
