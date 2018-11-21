@@ -14,6 +14,8 @@ package org.semanticweb.owlapi.reasoner;
 
 import static org.semanticweb.owlapi.util.OWLAPIStreamUtils.asUnorderedSet;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -22,6 +24,7 @@ import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
 import org.semanticweb.owlapi.model.OWLLiteral;
@@ -29,7 +32,9 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
+import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.util.Version;
+
 
 import com.google.common.collect.Sets;
 
@@ -813,6 +818,33 @@ public interface OWLReasoner {
      */
     default Stream<OWLClass> superClasses(OWLClassExpression ce) {
         return getSuperClasses(ce).entities();
+    }
+    
+    public Set<OWLSubClassOfAxiom> getAllInferredSuperClasses();
+    
+    public default Set<OWLSubClassOfAxiom> getInferredClasses(OWLDataFactory factory, Collection<OWLClass> allClasses)
+    {
+        Set<OWLSubClassOfAxiom> result = new HashSet<>();
+
+        OWLOntology rootOntology = this.getRootOntology();
+
+        for (OWLClass entity : allClasses) {
+            if (!this.isSatisfiable(entity)) {
+                result.add(factory.getOWLSubClassOfAxiom(entity, factory.getOWLNothing()));
+                continue;
+            }
+            SupFindVisitor sfv = new SupFindVisitor(entity, rootOntology);
+            entity.accept(sfv);
+
+            Set<OWLClass> superClasses = this.getSuperClasses(entity, true).getFlattened();
+
+            Set<OWLClass> difference = Sets.difference(superClasses, sfv.sups);
+
+            for (OWLClass sup : difference) {
+                result.add(factory.getOWLSubClassOfAxiom(entity, sup));
+            }
+        }
+        return result;
     }
 
     /**

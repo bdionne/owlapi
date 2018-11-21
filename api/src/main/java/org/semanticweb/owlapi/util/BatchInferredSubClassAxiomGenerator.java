@@ -12,54 +12,38 @@
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
 package org.semanticweb.owlapi.util;
 
-import static org.semanticweb.owlapi.util.OWLAPIPreconditions.checkNotNull;
-
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
-import org.semanticweb.owlapi.reasoner.SupFindVisitor;
 
 /**
  * @author Matthew Horridge, The University Of Manchester, Bio-Health Informatics Group
+ * @param <A>
  * @since 2.1.0
  */
-public class InferredSubClassAxiomGenerator extends
+public class BatchInferredSubClassAxiomGenerator<A> extends
     InferredClassAxiomGenerator<OWLSubClassOfAxiom> {
-
-    @Override
-    protected void addAxioms(OWLClass entity, OWLReasoner reasoner, OWLDataFactory dataFactory,
-        Set<OWLSubClassOfAxiom> result) {
-        checkNotNull(dataFactory, "dataFactory cannot be null");
-        checkNotNull(reasoner, "reasoner cannot be null");
-        checkNotNull(result, "result cannot be null");
-        checkNotNull(entity, "entity cannot be null");        
-        if (reasoner.isSatisfiable(entity)) {
-        	Stream<OWLClass> sups = reasoner.getSuperClasses(entity, true).entities();
-        	if (sups != null) {
-        		sups.filter(ent -> filterAsserted(reasoner, entity, ent))
-        		.forEach(sup -> result.add(dataFactory.getOWLSubClassOfAxiom(entity, sup)));
-        	}
-        } else {
-            result.add(dataFactory.getOWLSubClassOfAxiom(entity, dataFactory.getOWLNothing()));
-        }
+	
+	@Override
+    public Set<OWLSubClassOfAxiom> createAxioms(OWLDataFactory df, OWLReasoner reasoner) {
+        return reasoner.getAllInferredSuperClasses();
+        
     }
+
     
-    private boolean filterAsserted(OWLReasoner reasoner, OWLClass entity, OWLClass ent) {
-    	if (entity.getIRI().getShortForm().equalsIgnoreCase("C999999")) {
-    		System.out.println(entity);
-    	}
-    	SupFindVisitor sfv = new SupFindVisitor(entity, reasoner.getRootOntology());
-        entity.accept(sfv);
-        return !sfv.sups.contains(ent);
-    	
-    }
-
     @Override
     public String getLabel() {
         return "Subclasses";
     }
+
+
+	@Override
+	protected void addAxioms(OWLClass entity, OWLReasoner reasoner, OWLDataFactory dataFactory,
+			Set<OWLSubClassOfAxiom> result) {
+		// TODO Auto-generated method stub
+		
+	}
 }
