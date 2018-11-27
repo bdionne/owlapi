@@ -71,7 +71,7 @@ public class InferredOntologyGenerator {
             new InferredEquivalentObjectPropertyAxiomGenerator(),
             new InferredInverseObjectPropertiesAxiomGenerator(),
             new InferredObjectPropertyCharacteristicAxiomGenerator(),
-            new InferredPropertyAssertionGenerator(), new InferredSubClassAxiomGenerator(),
+            new InferredPropertyAssertionGenerator(), new BatchInferredSubClassAxiomGenerator(),
             new InferredSubDataPropertyAxiomGenerator(),
             new InferredSubObjectPropertyAxiomGenerator());
     }
