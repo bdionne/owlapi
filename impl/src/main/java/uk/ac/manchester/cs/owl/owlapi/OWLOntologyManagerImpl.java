@@ -157,7 +157,7 @@ public class OWLOntologyManagerImpl
     protected final PriorityCollection<OWLOntologyFactory> ontologyFactories;
     protected final PriorityCollection<OWLParserFactory> parserFactories;
     protected final PriorityCollection<OWLStorerFactory> ontologyStorers;
-    private final AtomicBoolean broadcastChanges = new AtomicBoolean(true);
+    public final AtomicBoolean broadcastChanges = new AtomicBoolean(true);
     private final Lock readLock;
     private final Lock writeLock;
     protected OWLOntologyChangeBroadcastStrategy defaultChangeBroadcastStrategy =
