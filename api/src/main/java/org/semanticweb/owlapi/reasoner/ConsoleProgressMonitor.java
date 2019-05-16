@@ -37,15 +37,17 @@ public class ConsoleProgressMonitor implements ReasonerProgressMonitor,
 
     @Override
     public void reasonerTaskProgressChanged(int value, int max) {
-        if (max > 0) {
-            int percent = value * 100 / max;
-            if (lastPercentage != percent) {
-                System.out.print("    ");
-                System.out.print(percent);
-                System.out.println("%");
-                lastPercentage = percent;
-            }
-        }
+    	if (max > 0) {
+    		int percent = value * 100 / max;
+    		if ((percent > 0) && ((percent % 5) == 0)) {
+    			if (lastPercentage != percent) {
+    				System.out.print("    ");
+    				System.out.print(percent);
+    				System.out.println("%");
+    				lastPercentage = percent;
+    			}
+    		}
+    	}
     }
 
     @Override
