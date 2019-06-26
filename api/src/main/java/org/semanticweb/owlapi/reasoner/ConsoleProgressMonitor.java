@@ -22,16 +22,19 @@ public class ConsoleProgressMonitor implements ReasonerProgressMonitor,
     Serializable {
 
     private int lastPercentage;
+    
+    private String taskName = "No Name";
 
     @Override
     public void reasonerTaskStarted(String taskName) {
+    	this.taskName = taskName;
         System.out.print(taskName);
         System.out.println(" ...");
     }
 
     @Override
     public void reasonerTaskStopped() {
-        System.out.println("    ... finished");
+        System.out.println(taskName + "    ... finished");
         lastPercentage = 0;
     }
 
