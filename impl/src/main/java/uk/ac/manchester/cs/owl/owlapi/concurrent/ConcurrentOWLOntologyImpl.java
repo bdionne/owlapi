@@ -173,32 +173,41 @@ public class ConcurrentOWLOntologyImpl implements OWLMutableOntology, HasTrimToS
 
     @Override
     public int hashCode() {
+    	return delegate.hashCode();
+    	/**
         readLock.lock();
         try {
-            return delegate.hashCode();
+            
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
+    	return delegate.equals(obj);
+    	/**
         readLock.lock();
         try {
             return delegate.equals(obj);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public OWLOntologyManager getOWLOntologyManager() {
+    	return delegate.getOWLOntologyManager();
+    	/**
         readLock.lock();
         try {
             return delegate.getOWLOntologyManager();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
@@ -213,254 +222,326 @@ public class ConcurrentOWLOntologyImpl implements OWLMutableOntology, HasTrimToS
 
     @Override
     public OWLOntologyID getOntologyID() {
+    	return delegate.getOntologyID();
+    	/**
         readLock.lock();
         try {
             return delegate.getOntologyID();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public boolean isAnonymous() {
+    	return delegate.isAnonymous();
+    	/**
         readLock.lock();
         try {
             return delegate.isAnonymous();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLAnnotation> getAnnotations() {
+    	return delegate.getAnnotations();
+    	/**
         readLock.lock();
         try {
             return delegate.getAnnotations();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<IRI> getDirectImportsDocuments() {
+    	return delegate.getDirectImportsDocuments();
+    	/**
         readLock.lock();
         try {
             return delegate.getDirectImportsDocuments();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<IRI> directImportsDocuments() {
+    	return delegate.directImportsDocuments();
+    	/**
         readLock.lock();
         try {
             return delegate.directImportsDocuments();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLOntology> getDirectImports() {
+    	return delegate.getDirectImports();
+    	/**
         readLock.lock();
         try {
             return delegate.getDirectImports();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLOntology> directImports() {
+    	return delegate.directImports();
+    	/**
         readLock.lock();
         try {
             return delegate.directImports();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLOntology> getImports() {
+    	return delegate.getImports();
+    	/**
         readLock.lock();
         try {
             return delegate.getImports();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLOntology> imports() {
+    	return delegate.imports();
+    	/**
         readLock.lock();
         try {
             return delegate.imports();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLOntology> getImportsClosure() {
+    	return delegate.getImportsClosure();
+    	/**
         readLock.lock();
         try {
             return delegate.getImportsClosure();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLOntology> importsClosure() {
+    	return delegate.importsClosure();
+    	/**
         readLock.lock();
         try {
             return delegate.importsClosure();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLImportsDeclaration> getImportsDeclarations() {
+    	return delegate.getImportsDeclarations();
+    	/**
         readLock.lock();
         try {
             return delegate.getImportsDeclarations();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public boolean isEmpty() {
+    	return delegate.isEmpty();
+    	/**
         readLock.lock();
         try {
             return delegate.isEmpty();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLAxiom> getTBoxAxioms(Imports imports) {
+    	return delegate.getTBoxAxioms(imports);
+    	/**
         readLock.lock();
         try {
             return delegate.getTBoxAxioms(imports);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLAxiom> getABoxAxioms(Imports imports) {
+    	return delegate.getABoxAxioms(imports);
+    	/**
         readLock.lock();
         try {
             return delegate.getABoxAxioms(imports);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLAxiom> getRBoxAxioms(Imports imports) {
+    	return delegate.getRBoxAxioms(imports);
+    	/**
         readLock.lock();
         try {
             return delegate.getRBoxAxioms(imports);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLAxiom> tboxAxioms(Imports imports) {
+    	return delegate.tboxAxioms(imports);
+    	/**
         readLock.lock();
         try {
             return delegate.tboxAxioms(imports);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLAxiom> aboxAxioms(Imports imports) {
+    	return delegate.aboxAxioms(imports);
+    	/**
         readLock.lock();
         try {
             return delegate.aboxAxioms(imports);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLAxiom> rboxAxioms(Imports imports) {
+    	return delegate.rboxAxioms(imports);
+    	/**
         readLock.lock();
         try {
             return delegate.rboxAxioms(imports);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLClassAxiom> getGeneralClassAxioms() {
+    	return delegate.getGeneralClassAxioms();
+    	/**
         readLock.lock();
         try {
             return delegate.getGeneralClassAxioms();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLEntity> getSignature() {
+    	return delegate.getSignature();
+    	/**
         readLock.lock();
         try {
             return delegate.getSignature();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     @Deprecated
     public Set<OWLEntity> getSignature(Imports imports) {
+    	return delegate.getSignature(imports);
+    	/**
         readLock.lock();
         try {
             return delegate.getSignature(imports);
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLClassAxiom> generalClassAxioms() {
+    	return delegate.generalClassAxioms();
+    	/**
         readLock.lock();
         try {
             return delegate.generalClassAxioms();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
     public Stream<OWLEntity> signature() {
+    	return delegate.signature();
+    	/**
         readLock.lock();
         try {
             return delegate.signature();
         } finally {
             readLock.unlock();
         }
+        **/
     }
 
     @Override
@@ -1007,11 +1088,11 @@ public class ConcurrentOWLOntologyImpl implements OWLMutableOntology, HasTrimToS
 
     @Override
     public boolean containsAxiom(OWLAxiom owlAxiom) {
-        readLock.lock();
+        //readLock.lock();
         try {
             return delegate.containsAxiom(owlAxiom);
         } finally {
-            readLock.unlock();
+            //readLock.unlock();
         }
     }
 

@@ -827,12 +827,15 @@ public interface OWLReasoner {
         Set<OWLSubClassOfAxiom> result = new HashSet<>();
 
         OWLOntology rootOntology = this.getRootOntology();
-
+        
         for (OWLClass entity : allClasses) {
-            if (!this.isSatisfiable(entity)) {
-                result.add(factory.getOWLSubClassOfAxiom(entity, factory.getOWLNothing()));
-                continue;
-            }
+        	
+        	
+        	if (!this.isSatisfiable(entity)) {
+        		result.add(factory.getOWLSubClassOfAxiom(entity, factory.getOWLNothing()));
+        		continue;
+        	}
+        	
             SupFindVisitor sfv = new SupFindVisitor(entity, rootOntology);
             entity.accept(sfv);
 
